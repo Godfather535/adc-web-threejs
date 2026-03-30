@@ -1,0 +1,49 @@
+:root {
+  --bg: #070b14;
+  --glow-primary: #3b82f6;
+  --glow-secondary: #8b5cf6;
+  --accent: #00ffc6;
+  --glass: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.12);
+  --text: rgba(255, 255, 255, 0.88);
+  --text-muted: rgba(255, 255, 255, 0.55);
+  --sans: 'Open Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --display: 'Open Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: var(--sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text);
+  background: var(--bg);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+/* Non-static positioning helps ScrollTrigger (and other scroll observers) measure correctly */
+#root {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}

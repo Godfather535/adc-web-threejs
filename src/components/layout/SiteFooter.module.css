@@ -1,0 +1,74 @@
+.footer {
+  padding: 2.5rem clamp(1.25rem, 4vw, 2rem) 2rem;
+  background: #050810;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.brand {
+  font-family: var(--display, var(--sans));
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--glow-primary);
+  margin: 0 0 0.35rem;
+}
+
+.copy {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  align-items: center;
+}
+
+.links a {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.links a:hover {
+  color: var(--accent);
+}
+
+.social {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.social a:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #fff;
+}

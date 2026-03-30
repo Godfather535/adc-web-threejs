@@ -1,0 +1,313 @@
+.section {
+  position: relative;
+  padding: clamp(3.75rem, 9vw, 5.5rem) clamp(1.25rem, 5vw, 3rem) clamp(4.25rem, 11vw, 6rem);
+  background: linear-gradient(180deg, #050810 0%, #070b14 38%, #04060c 100%);
+  scroll-margin-top: 72px;
+  overflow: hidden;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% -10%, rgba(59, 130, 246, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 38% at 85% 75%, rgba(0, 255, 198, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse 35% 32% at 8% 60%, rgba(139, 92, 246, 0.1) 0%, transparent 48%);
+  pointer-events: none;
+}
+
+.bgSvg {
+  position: absolute;
+  inset: -5% -10% -8% -10%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.bgSvg path[data-cta-energy] {
+  fill: none;
+  stroke: url(#ctaEnergyGrad);
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.bgSvg circle[data-cta-node] {
+  fill: rgba(0, 255, 198, 0.35);
+}
+
+.orbs {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+  opacity: 0.22;
+  will-change: transform;
+}
+
+.orb1 {
+  width: min(42vw, 320px);
+  height: min(42vw, 320px);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.55) 0%, transparent 70%);
+  left: -8%;
+  top: 15%;
+}
+
+.orb2 {
+  width: min(36vw, 280px);
+  height: min(36vw, 280px);
+  background: radial-gradient(circle, rgba(0, 255, 198, 0.4) 0%, transparent 70%);
+  right: -5%;
+  top: 35%;
+}
+
+.orb3 {
+  width: min(48vw, 380px);
+  height: min(48vw, 380px);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 72%);
+  left: 25%;
+  bottom: -18%;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  perspective: 1280px;
+}
+
+.panel {
+  padding: clamp(2.1rem, 4.5vw, 2.9rem) clamp(1.5rem, 3.5vw, 2.6rem);
+  border-radius: 20px;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    rgba(7, 11, 20, 0.65) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.1),
+    0 32px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  position: relative;
+  overflow: hidden;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.panelGlow {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 210deg,
+    transparent 0deg,
+    rgba(59, 130, 246, 0.06) 60deg,
+    rgba(0, 255, 198, 0.08) 120deg,
+    rgba(139, 92, 246, 0.06) 200deg,
+    transparent 280deg
+  );
+  opacity: 0.65;
+  pointer-events: none;
+  animation: ctaGlowSpin 22s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelGlow {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
+@keyframes ctaGlowSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.75),
+    rgba(0, 255, 198, 0.55),
+    rgba(139, 92, 246, 0.5),
+    transparent
+  );
+  z-index: 1;
+}
+
+.panelInner {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  font-family: var(--display, var(--sans));
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.65rem;
+}
+
+.headline {
+  font-family: var(--display, var(--sans));
+  font-size: clamp(1.7rem, 3.8vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  margin: 0 0 0.85rem;
+  color: rgba(255, 255, 255, 0.98);
+}
+
+.hWord {
+  display: inline-block;
+  margin-right: 0.28em;
+  white-space: nowrap;
+}
+
+.hWord:last-child {
+  margin-right: 0;
+}
+
+.headGrad {
+  background: linear-gradient(115deg, #fff 0%, var(--accent) 55%, var(--glow-primary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  font-size: clamp(0.92rem, 1.3vw, 1.02rem);
+  line-height: 1.58;
+  color: rgba(255, 255, 255, 0.52);
+  margin: 0 auto 1.35rem;
+  max-width: 34rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem 0.55rem;
+  margin-bottom: 1.5rem;
+}
+
+.chip {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 0.38rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem 1.35rem;
+}
+
+.magneticWrap {
+  display: inline-block;
+  border-radius: 999px;
+  will-change: transform;
+}
+
+.primary {
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 0.88rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  font-family: var(--sans);
+  color: #fff;
+  background: linear-gradient(135deg, var(--glow-primary), #2563eb);
+  box-shadow:
+    0 6px 32px rgba(59, 130, 246, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.15s ease;
+}
+
+.primary:hover {
+  box-shadow:
+    0 8px 40px rgba(59, 130, 246, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.primary:active {
+  transform: scale(0.98);
+}
+
+.primary:focus-visible {
+  outline: 2px solid rgba(0, 255, 198, 0.55);
+  outline-offset: 3px;
+}
+
+.link {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  padding-bottom: 2px;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--accent);
+  border-color: rgba(0, 255, 198, 0.45);
+}
+
+.link:focus-visible {
+  outline: 2px solid rgba(0, 255, 198, 0.45);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.frameSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.35;
+}
+
+.frameSvg path[data-cta-frame] {
+  fill: none;
+  stroke: rgba(0, 255, 198, 0.25);
+  stroke-width: 0.75;
+  stroke-linecap: round;
+}
