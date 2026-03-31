@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useI18n } from '../../i18n/useI18n'
 import styles from './CoreProductsSection.module.css'
 
 const ease = 'none'
@@ -13,14 +14,29 @@ const headerStats = [
   { value: 'API', label: 'Native' },
 ] as const
 
+const headerStatsDe = [
+  { value: '4', label: 'Module' },
+  { value: '1', label: 'Datensatz' },
+  { value: 'API', label: 'Nativ' },
+] as const
+
 const easyChips = [
   { key: 'Load', val: 'ACWR + sRPE' },
   { key: 'Med', val: 'HIPAA-ready' },
   { key: 'Sync', val: 'Roster ↔ EMR' },
 ] as const
 
+const easyChipsDe = [
+  { key: 'Last', val: 'ACWR + sRPE' },
+  { key: 'Med', val: 'HIPAA-bereit' },
+  { key: 'Sync', val: 'Roster ↔ EMR' },
+] as const
+
 const meshSpecs = ['Consent graph', 'Immutable audit', 'Partner vaults'] as const
 const msgSpecs = ['E2E encrypted', 'Retention rules', 'Staff channels'] as const
+
+const meshSpecsDe = ['Consent graph', 'Unveränderliche Audit-Protokolle', 'Partner-Tresore'] as const
+const msgSpecsDe = ['End-to-End verschlüsselt', 'Retention-Regeln', 'Staff-Channels'] as const
 
 const infraMetrics = [
   { val: '3.1', lab: 'OpenAPI' },
@@ -28,9 +44,21 @@ const infraMetrics = [
   { val: 'EU · US', lab: 'Regions' },
 ] as const
 
+const infraMetricsDe = [
+  { val: '3.1', lab: 'OpenAPI' },
+  { val: 'mTLS', lab: 'Unterwegs' },
+  { val: 'EU · US', lab: 'Regionen' },
+] as const
+
 const infraTags = ['REST', 'Webhooks', 'SSO / SCIM'] as const
 
 const infraEndpoints = [
+  { method: 'POST', path: '/v1/events/ingest', status: 'Live' },
+  { method: 'GET', path: '/v1/roster/{id}/snapshot', status: 'Live' },
+  { method: 'SIG', path: 'webhooks.signed_payload', status: 'HMAC' },
+] as const
+
+const infraEndpointsDe = [
   { method: 'POST', path: '/v1/events/ingest', status: 'Live' },
   { method: 'GET', path: '/v1/roster/{id}/snapshot', status: 'Live' },
   { method: 'SIG', path: 'webhooks.signed_payload', status: 'HMAC' },
@@ -161,6 +189,14 @@ export function CoreProductsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const recordsRevealRef = useRef<HTMLDivElement>(null)
   const infraRevealRef = useRef<HTMLDivElement>(null)
+  const { lang } = useI18n()
+
+  const headerStatsDisplay = lang === 'de' ? headerStatsDe : headerStats
+  const easyChipsDisplay = lang === 'de' ? easyChipsDe : easyChips
+  const meshSpecsDisplay = lang === 'de' ? meshSpecsDe : meshSpecs
+  const msgSpecsDisplay = lang === 'de' ? msgSpecsDe : msgSpecs
+  const infraMetricsDisplay = lang === 'de' ? infraMetricsDe : infraMetrics
+  const infraEndpointsDisplay = lang === 'de' ? infraEndpointsDe : infraEndpoints
 
   useLayoutEffect(() => {
     const section = sectionRef.current
@@ -420,10 +456,10 @@ export function CoreProductsSection() {
         <div className={styles.headerBlock}>
           <p className={styles.eyebrow}>Suite</p>
           <h2 id="products-heading" className={styles.headline}>
-            Core products
+            {lang === 'de' ? 'Kernprodukte' : 'Core products'}
           </h2>
           <div className={styles.statsStrip}>
-            {headerStats.map((s) => (
+            {headerStatsDisplay.map((s) => (
               <div key={s.label} className={styles.statChip}>
                 <span className={styles.statValue}>{s.value}</span>
                 <span className={styles.statLabel}>{s.label}</span>
@@ -439,14 +475,16 @@ export function CoreProductsSection() {
                 <div className={styles.recordsIcon} aria-hidden>
                   ◈
                 </div>
-                <span className={styles.badge}>Flagship</span>
+                <span className={styles.badge}>{lang === 'de' ? 'Flaggschiff' : 'Flagship'}</span>
               </div>
               <h3 className={styles.recordsTitle}>easyRecords</h3>
               <p className={styles.tagline}>
-                One athlete graph—load, clinic notes, timelines—no duplicate silos.
+                {lang === 'de'
+                  ? 'Ein Athleten-Graph—Last, Kliniknotizen, Zeitachsen—ohne doppelte Silos.'
+                  : 'One athlete graph—load, clinic notes, timelines—no duplicate silos.'}
               </p>
               <div className={styles.chipGrid}>
-                {easyChips.map((c) => (
+                {easyChipsDisplay.map((c) => (
                   <div key={c.key} className={styles.infoChip}>
                     <span className={styles.infoChipKey}>{c.key}</span>
                     <span className={styles.infoChipVal}>{c.val}</span>
@@ -454,11 +492,11 @@ export function CoreProductsSection() {
                 ))}
               </div>
               <a className={styles.learnMore} href="#footer">
-                Explore →
+                {lang === 'de' ? 'Entdecken →' : 'Explore →'}
               </a>
             </div>
             <div className={styles.recordsVisual}>
-              <span className={styles.visualLabel}>Live load mix</span>
+              <span className={styles.visualLabel}>{lang === 'de' ? 'Live-Last-Mix' : 'Live load mix'}</span>
               <MiniBars reduceMotion={reduceMotion} />
             </div>
           </article>
@@ -473,10 +511,12 @@ export function CoreProductsSection() {
             </div>
             <h3 className={styles.smallTitle}>easyDataMesh</h3>
             <p className={styles.smallHook}>
-              Governed exchange—clubs, labs, federations—with consent + lineage.
+              {lang === 'de'
+                ? 'Geregelter Austausch—Vereine, Labore, Verbände—mit Einwilligung + Herkunft.'
+                : 'Governed exchange—clubs, labs, federations—with consent + lineage.'}
             </p>
             <div className={styles.specRow}>
-              {meshSpecs.map((t) => (
+              {meshSpecsDisplay.map((t) => (
                 <span key={t} className={styles.specPill}>
                   {t}
                 </span>
@@ -496,18 +536,20 @@ export function CoreProductsSection() {
             </div>
             <h3 className={styles.smallTitle}>SecureMessenger</h3>
             <p className={styles.smallHook}>
-              Compliant threads for staff ↔ athletes—policy-bound, archived.
+              {lang === 'de'
+                ? 'Compliance-konforme Threads für Team ↔ Athleten—richtliniengebunden, archiviert.'
+                : 'Compliant threads for staff ↔ athletes—policy-bound, archived.'}
             </p>
             <div className={styles.specRow}>
-              {msgSpecs.map((t) => (
+              {msgSpecsDisplay.map((t) => (
                 <span key={t} className={styles.specPill}>
                   {t}
                 </span>
               ))}
             </div>
             <div className={styles.chatMock}>
-              <div className={styles.chatMeta}>Encrypted · Staff</div>
-              Load alert: review before pitch.
+              <div className={styles.chatMeta}>{lang === 'de' ? 'Verschlüsselt · Team' : 'Encrypted · Staff'}</div>
+              {lang === 'de' ? 'Last-Alert: Bitte vor dem Spiel prüfen.' : 'Load alert: review before pitch.'}
             </div>
           </article>
         </div>
@@ -515,13 +557,15 @@ export function CoreProductsSection() {
         <div ref={infraRevealRef} className={styles.blockReveal}>
           <div className={styles.infraCard}>
             <div className={styles.infraLeft}>
-              <p className={styles.infraEyebrow}>Open platform</p>
-              <h3 className={styles.infraTitle}>Open infrastructure</h3>
+              <p className={styles.infraEyebrow}>{lang === 'de' ? 'Offene Plattform' : 'Open platform'}</p>
+              <h3 className={styles.infraTitle}>{lang === 'de' ? 'Offene Infrastruktur' : 'Open infrastructure'}</h3>
               <p className={styles.infraHook}>
-                Same contracts into your lake, BI, and agents—no lock-in.
+                {lang === 'de'
+                  ? 'Die gleichen Verträge in Ihr Data-Lake, BI und Ihre Agents—ohne Lock-in.'
+                  : 'Same contracts into your lake, BI, and agents—no lock-in.'}
               </p>
               <div className={styles.infraMetrics}>
-                {infraMetrics.map((m) => (
+                {infraMetricsDisplay.map((m) => (
                   <div key={m.lab} className={styles.infraMetric}>
                     <span className={styles.infraMetricVal}>{m.val}</span>
                     <span className={styles.infraMetricLab}>{m.lab}</span>
@@ -536,7 +580,7 @@ export function CoreProductsSection() {
                 ))}
               </div>
               <button type="button" className={styles.apiBtn}>
-                API docs
+                {lang === 'de' ? 'API-Dokumentation' : 'API docs'}
               </button>
             </div>
 
@@ -549,10 +593,12 @@ export function CoreProductsSection() {
                     <span />
                     <span />
                   </div>
-                  <span className={styles.codeTitle}>Integration surface</span>
+                  <span className={styles.codeTitle}>
+                    {lang === 'de' ? 'Integrationsoberfläche' : 'Integration surface'}
+                  </span>
                 </div>
                 <div className={styles.codeBody}>
-                  {infraEndpoints.map((e) => (
+                  {infraEndpointsDisplay.map((e) => (
                     <div key={e.path} className={styles.endpointRow}>
                       <span className={styles.endpointMethod}>{e.method}</span>
                       <span className={styles.endpointPath}>{e.path}</span>

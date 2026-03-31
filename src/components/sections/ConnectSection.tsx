@@ -1,11 +1,13 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useI18n } from '../../i18n/useI18n'
 import styles from './ConnectSection.module.css'
 
 const easeNone = 'none'
 
-const stackChips = ['OpenAPI 3.1', 'Signed webhooks', 'Idempotent writes'] as const
+const stackChipsEn = ['OpenAPI 3.1', 'Signed webhooks', 'Idempotent writes'] as const
+const stackChipsDe = ['OpenAPI 3.1', 'Signierte Webhooks', 'Idempotente Writes'] as const
 
 function WebhookSvg() {
   return (
@@ -57,6 +59,7 @@ function SyncSvg() {
 export function ConnectSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = usePrefersReducedMotion()
+  const { lang } = useI18n()
 
   useLayoutEffect(() => {
     const section = sectionRef.current
@@ -173,16 +176,26 @@ export function ConnectSection() {
       <div className={styles.inner}>
         <div className={styles.copy}>
           <p className={styles.eyebrow} data-conn-eyebrow>
-            Connectivity
+            {lang === 'de' ? 'Konnektivität' : 'Connectivity'}
           </p>
           <h2 id="connect-heading" className={styles.headline} data-conn-headline>
-            Plugs into your stack—<span>not the other way around</span>
+            {lang === 'de' ? (
+              <>
+                In Ihren Stack eingebunden—<span>nicht umgekehrt</span>
+              </>
+            ) : (
+              <>
+                Plugs into your stack—<span>not the other way around</span>
+              </>
+            )}
           </h2>
           <p className={styles.lede} data-conn-lede>
-            Ship events, roster deltas, and clinical signals to the systems your staff already trust.
+            {lang === 'de'
+              ? 'Senden Sie Events, Roster-Deltas und klinische Signale an die Systeme, denen Ihr Team bereits vertraut.'
+              : 'Ship events, roster deltas, and clinical signals to the systems your staff already trust.'}
           </p>
           <div className={styles.chips}>
-            {stackChips.map((c) => (
+            {(lang === 'de' ? stackChipsDe : stackChipsEn).map((c) => (
               <span key={c} className={styles.chip} data-conn-chip>
                 {c}
               </span>
@@ -199,7 +212,13 @@ export function ConnectSection() {
               <span className={styles.apiTitle}>integration.ts</span>
             </div>
             <pre className={styles.apiBody}>
-              {`// Pull roster snapshot — signed request
+              {lang === 'de'
+                ? `// Roster-Snapshot abrufen — signierte Anfrage
+const res = await fetch('/v1/roster/snapshot', {
+  headers: { Authorization: 'Bearer …' },
+});
+await ingestEvents('load.updated');`
+                : `// Pull roster snapshot — signed request
 const res = await fetch('/v1/roster/snapshot', {
   headers: { Authorization: 'Bearer …' },
 });
@@ -211,16 +230,22 @@ await ingestEvents('load.updated');`}
             <div className={styles.tileSvg}>
               <WebhookSvg />
             </div>
-            <h3 className={styles.tileTitle}>Webhooks</h3>
-            <p className={styles.tileHint}>HMAC-verified payloads to your endpoints.</p>
+            <h3 className={styles.tileTitle}>{lang === 'de' ? 'Webhooks' : 'Webhooks'}</h3>
+            <p className={styles.tileHint}>
+              {lang === 'de' ? 'HMAC-verifizierte Payloads zu Ihren Endpunkten.' : 'HMAC-verified payloads to your endpoints.'}
+            </p>
           </div>
 
           <div className={styles.tile} data-conn-tile>
             <div className={styles.tileSvg}>
               <SyncSvg />
             </div>
-            <h3 className={styles.tileTitle}>Roster &amp; EMR sync</h3>
-            <p className={styles.tileHint}>Bi-directional flows with conflict rules.</p>
+            <h3 className={styles.tileTitle}>
+              {lang === 'de' ? 'Roster- &amp; EMR-Synchronisation' : 'Roster &amp; EMR sync'}
+            </h3>
+            <p className={styles.tileHint}>
+              {lang === 'de' ? 'Bidirektionale Flows mit Konfliktregeln.' : 'Bi-directional flows with conflict rules.'}
+            </p>
           </div>
         </div>
       </div>

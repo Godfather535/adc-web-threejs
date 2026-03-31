@@ -1,12 +1,31 @@
 import { useLayoutEffect, useRef, type ReactElement } from 'react'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useI18n } from '../../i18n/useI18n'
+import { useTheme } from '../../context/ThemeContext'
 import styles from './LaunchPathSection.module.css'
 
-type VisualProps = { uid: number }
+type Lang = 'en' | 'de'
+type Theme = 'dark' | 'light'
+type VisualProps = { uid: number; lang: Lang; theme: Theme }
 
-function VisualDiscover({ uid }: VisualProps) {
+function getVisualTheme(theme: Theme) {
+  const isLight = theme === 'light'
+  return {
+    panelBg: isLight ? 'rgba(236,244,254,0.92)' : 'rgba(0,0,0,0.2)',
+    panelStroke: isLight ? 'rgba(37,99,235,0.2)' : 'rgba(255,255,255,0.06)',
+    textStrong: isLight ? 'rgba(15,23,42,0.78)' : 'rgba(255,255,255,0.75)',
+    textMuted: isLight ? 'rgba(30,41,59,0.56)' : 'rgba(255,255,255,0.5)',
+    textSoft: isLight ? 'rgba(51,65,85,0.46)' : 'rgba(255,255,255,0.38)',
+    ringFill: isLight ? 'rgba(37,99,235,0.08)' : 'rgba(0,255,198,0.08)',
+  }
+}
+
+function VisualDiscover({ uid, lang, theme }: VisualProps) {
   const p = `lv${uid}`
+  const t = getVisualTheme(theme)
+  const scopeText = lang === 'de' ? 'BEREICH' : 'SCOPE'
+  const noBuildText = lang === 'de' ? 'KEIN BUILD' : 'NO BUILD YET'
   return (
     <svg className={styles.visual} viewBox="0 0 260 118" preserveAspectRatio="xMidYMid meet" aria-hidden>
       <defs>
@@ -16,13 +35,13 @@ function VisualDiscover({ uid }: VisualProps) {
           <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.35" />
         </linearGradient>
       </defs>
-      <rect x="12" y="10" width="236" height="98" rx="8" fill="rgba(0,0,0,0.2)" stroke="rgba(255,255,255,0.06)" />
-      <circle cx="130" cy="58" r="22" fill="rgba(0,255,198,0.08)" stroke="rgba(0,255,198,0.35)" strokeWidth="1" />
-      <text x="130" y="56" textAnchor="middle" fill="rgba(255,255,255,0.75)" fontSize="8" fontWeight="700">
-        SCOPE
+      <rect x="12" y="10" width="236" height="98" rx="8" fill={t.panelBg} stroke={t.panelStroke} />
+      <circle cx="130" cy="58" r="22" fill={t.ringFill} stroke="rgba(14,165,233,0.35)" strokeWidth="1" />
+      <text x="130" y="56" textAnchor="middle" fill={t.textStrong} fontSize="8" fontWeight="700">
+        {scopeText}
       </text>
       <text x="130" y="66" textAnchor="middle" fill="rgba(0,255,198,0.5)" fontSize="5.5" fontWeight="600">
-        NO BUILD YET
+        {noBuildText}
       </text>
       <path
         data-launch-draw
@@ -57,19 +76,19 @@ function VisualDiscover({ uid }: VisualProps) {
         strokeLinecap="round"
       />
       <rect x="34" y="18" width="36" height="18" rx="4" fill="rgba(59,130,246,0.12)" stroke="rgba(59,130,246,0.35)" />
-      <text x="52" y="29" textAnchor="middle" fill="rgba(255,255,255,0.55)">
+      <text x="52" y="29" textAnchor="middle" fill={t.textMuted}>
         EMR
       </text>
       <rect x="190" y="18" width="36" height="18" rx="4" fill="rgba(139,92,246,0.1)" stroke="rgba(167,139,250,0.4)" />
-      <text x="208" y="29" textAnchor="middle" fill="rgba(255,255,255,0.55)">
+      <text x="208" y="29" textAnchor="middle" fill={t.textMuted}>
         HRIS
       </text>
       <rect x="34" y="78" width="40" height="18" rx="4" fill="rgba(0,255,198,0.08)" stroke="rgba(0,255,198,0.3)" />
-      <text x="54" y="89" textAnchor="middle" fill="rgba(255,255,255,0.5)">
+      <text x="54" y="89" textAnchor="middle" fill={t.textMuted}>
         POLICY
       </text>
       <rect x="186" y="78" width="44" height="18" rx="4" fill="rgba(59,130,246,0.1)" stroke="rgba(96,165,250,0.35)" />
-      <text x="208" y="89" textAnchor="middle" fill="rgba(255,255,255,0.5)">
+      <text x="208" y="89" textAnchor="middle" fill={t.textMuted}>
         KPIs
       </text>
       <circle data-launch-pulse cx="130" cy="58" r="3" fill="#00ffc6" opacity="0.55" />
@@ -77,8 +96,12 @@ function VisualDiscover({ uid }: VisualProps) {
   )
 }
 
-function VisualIntegrate({ uid }: VisualProps) {
+function VisualIntegrate({ uid, lang, theme }: VisualProps) {
   const p = `lv${uid}`
+  const t = getVisualTheme(theme)
+  const controlText = lang === 'de' ? 'KONTROLLE' : 'CONTROL'
+  const keysText = lang === 'de' ? 'IAM / SCHLÜSSEL' : 'IAM / KEYS'
+  const signedLine = lang === 'de' ? 'SIGNIERT · IDEMPOTENT · HMAC' : 'SIGNED · IDEMPOTENT · HMAC'
   return (
     <svg className={styles.visual} viewBox="0 0 260 118" preserveAspectRatio="xMidYMid meet" aria-hidden>
       <defs>
@@ -89,14 +112,14 @@ function VisualIntegrate({ uid }: VisualProps) {
         </linearGradient>
       </defs>
       <rect x="10" y="38" width="52" height="44" rx="6" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.45)" />
-      <text x="36" y="58" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="8" fontWeight="700">
+      <text x="36" y="58" textAnchor="middle" fill={t.textStrong} fontSize="8" fontWeight="700">
         ADC
       </text>
-      <text x="36" y="70" textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="5.5">
-        CONTROL
+      <text x="36" y="70" textAnchor="middle" fill={t.textSoft} fontSize="5.5">
+        {controlText}
       </text>
-      <rect x="104" y="42" width="56" height="36" rx="5" fill="rgba(0,0,0,0.25)" stroke="rgba(255,255,255,0.12)" />
-      <text x="132" y="58" textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="6">
+      <rect x="104" y="42" width="56" height="36" rx="5" fill={t.panelBg} stroke={t.panelStroke} />
+      <text x="132" y="58" textAnchor="middle" fill={t.textMuted} fontSize="6">
         SANDBOX
       </text>
       <text x="132" y="68" textAnchor="middle" fill="rgba(0,255,198,0.45)" fontSize="5.5">
@@ -110,8 +133,8 @@ function VisualIntegrate({ uid }: VisualProps) {
         fill="none"
         strokeLinecap="round"
       />
-      <text x="224" y="84" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="5.5">
-        IAM / KEYS
+      <text x="224" y="84" textAnchor="middle" fill={t.textSoft} fontSize="5.5">
+        {keysText}
       </text>
       <path
         data-launch-draw
@@ -131,16 +154,18 @@ function VisualIntegrate({ uid }: VisualProps) {
       />
       <polygon points="94,56 102,60 94,64" fill="#00ffc6" opacity="0.75" />
       <polygon points="192,56 200,60 192,64" fill="#00ffc6" opacity="0.75" />
-      <text x="130" y="28" textAnchor="middle" fill="rgba(255,255,255,0.32)" fontSize="5.5" fontWeight="600">
-        SIGNED · IDEMPOTENT · HMAC
+      <text x="130" y="28" textAnchor="middle" fill={t.textSoft} fontSize="5.5" fontWeight="600">
+        {signedLine}
       </text>
       <circle data-launch-pulse cx="132" cy="60" r="2.5" fill="#60a5fa" opacity="0.6" />
     </svg>
   )
 }
 
-function VisualPilot({ uid }: VisualProps) {
+function VisualPilot({ uid, lang, theme }: VisualProps) {
   const p = `lv${uid}`
+  const t = getVisualTheme(theme)
+  const loopText = lang === 'de' ? 'FEEDBACK-SCHLEIFE' : 'FEEDBACK LOOP'
   return (
     <svg className={styles.visual} viewBox="0 0 260 118" preserveAspectRatio="xMidYMid meet" aria-hidden>
       <defs>
@@ -159,27 +184,27 @@ function VisualPilot({ uid }: VisualProps) {
         strokeLinecap="round"
         transform="rotate(-90 130 70)"
       />
-      <text x="130" y="22" textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="5.5" fontWeight="600">
-        FEEDBACK LOOP
+      <text x="130" y="22" textAnchor="middle" fill={t.textSoft} fontSize="5.5" fontWeight="600">
+        {loopText}
       </text>
       <circle cx="130" cy="70" r="8" fill="rgba(0,255,198,0.12)" stroke="rgba(0,255,198,0.4)" />
-      <text x="130" y="72" textAnchor="middle" fill="rgba(255,255,255,0.65)" fontSize="6" fontWeight="700">
+      <text x="130" y="72" textAnchor="middle" fill={t.textStrong} fontSize="6" fontWeight="700">
         PILOT
       </text>
       <circle cx="88" cy="48" r="4" fill="rgba(59,130,246,0.35)" stroke="rgba(96,165,250,0.6)" />
       <circle cx="172" cy="48" r="4" fill="rgba(139,92,246,0.35)" stroke="rgba(167,139,250,0.55)" />
       <circle cx="88" cy="92" r="4" fill="rgba(0,255,198,0.2)" stroke="rgba(0,255,198,0.45)" />
       <circle cx="172" cy="92" r="4" fill="rgba(59,130,246,0.25)" stroke="rgba(96,165,250,0.5)" />
-      <text x="88" y="41" textAnchor="middle" fill="rgba(255,255,255,0.38)" fontSize="5">
+      <text x="88" y="41" textAnchor="middle" fill={t.textSoft} fontSize="5">
         W1
       </text>
-      <text x="172" y="41" textAnchor="middle" fill="rgba(255,255,255,0.38)" fontSize="5">
+      <text x="172" y="41" textAnchor="middle" fill={t.textSoft} fontSize="5">
         W2
       </text>
-      <text x="88" y="105" textAnchor="middle" fill="rgba(255,255,255,0.38)" fontSize="5">
+      <text x="88" y="105" textAnchor="middle" fill={t.textSoft} fontSize="5">
         W3
       </text>
-      <text x="172" y="105" textAnchor="middle" fill="rgba(255,255,255,0.38)" fontSize="5">
+      <text x="172" y="105" textAnchor="middle" fill={t.textSoft} fontSize="5">
         W4
       </text>
       <path
@@ -195,8 +220,9 @@ function VisualPilot({ uid }: VisualProps) {
   )
 }
 
-function VisualScale({ uid }: VisualProps) {
+function VisualScale({ uid, lang, theme }: VisualProps) {
   const p = `lv${uid}`
+  const t = getVisualTheme(theme)
   const bars = [
     { x: 48, h: 28 },
     { x: 78, h: 40 },
@@ -212,10 +238,10 @@ function VisualScale({ uid }: VisualProps) {
           <stop offset="100%" stopColor="#00ffc6" stopOpacity="0.65" />
         </linearGradient>
       </defs>
-      <text x="130" y="18" textAnchor="middle" fill="rgba(255,255,255,0.32)" fontSize="5.5" fontWeight="600">
+      <text x="130" y="18" textAnchor="middle" fill={t.textSoft} fontSize="5.5" fontWeight="600">
         DEMAND · ROSTER · LATENCY
       </text>
-      <line x1="32" y1="88" x2="228" y2="88" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+      <line x1="32" y1="88" x2="228" y2="88" stroke={theme === 'light' ? 'rgba(30,41,59,0.18)' : 'rgba(255,255,255,0.12)'} strokeWidth="1" />
       {bars.map((b) => (
         <rect
           key={b.x}
@@ -231,7 +257,7 @@ function VisualScale({ uid }: VisualProps) {
       <path
         data-launch-draw
         d="M 38 72 Q 80 58 120 64 T 210 52"
-        stroke="rgba(248, 250, 252, 0.45)"
+        stroke={theme === 'light' ? 'rgba(30, 64, 175, 0.45)' : 'rgba(248, 250, 252, 0.45)'}
         strokeWidth="1.2"
         fill="none"
         strokeLinecap="round"
@@ -241,12 +267,12 @@ function VisualScale({ uid }: VisualProps) {
       </text>
       <g>
         <rect x="14" y="96" width="52" height="16" rx="3" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.25)" />
-        <text x="40" y="106" textAnchor="middle" fill="rgba(255,255,255,0.42)" fontSize="5.5">
-          + SITE
+        <text x="40" y="106" textAnchor="middle" fill={t.textSoft} fontSize="5.5">
+          {lang === 'de' ? '+ STANDORT' : '+ SITE'}
         </text>
         <rect x="194" y="96" width="52" height="16" rx="3" fill="rgba(0,255,198,0.06)" stroke="rgba(0,255,198,0.28)" />
-        <text x="220" y="106" textAnchor="middle" fill="rgba(255,255,255,0.42)" fontSize="5.5">
-          SAME STACK
+        <text x="220" y="106" textAnchor="middle" fill={t.textSoft} fontSize="5.5">
+          {lang === 'de' ? 'GLEICHER STACK' : 'SAME STACK'}
         </text>
       </g>
       <circle data-launch-pulse cx="168" cy="42" r="2.5" fill="#fff" opacity="0.35" />
@@ -254,7 +280,7 @@ function VisualScale({ uid }: VisualProps) {
   )
 }
 
-const phases: readonly {
+const phasesEn: readonly {
   n: string
   title: string
   hint: string
@@ -296,9 +322,47 @@ const phases: readonly {
   },
 ]
 
+const phasesDe: typeof phasesEn = [
+  {
+    n: '01',
+    title: 'Entdecken & ausrichten',
+    hint: 'Woche 0–2',
+    tag: 'EMR · HRIS · policy · KPIs → zuerst ein gemeinsamer Scope.',
+    label: 'Phase eins: Inventarsysteme und Governance-Ziele in ein gemeinsames Scope-Diagramm.',
+    Visual: VisualDiscover,
+  },
+  {
+    n: '02',
+    title: 'Integrieren & härten',
+    hint: 'Woche 2–5',
+    tag: 'Sandbox · signierte Payloads · IAM—Security gibt das Go.',
+    label: 'Phase zwei: Sandbox-Endpunkte verbinden und Identität sowie Signaturen absichern.',
+    Visual: VisualIntegrate,
+  },
+  {
+    n: '03',
+    title: 'Pilot mit Operatoren',
+    hint: 'Woche 5–8',
+    tag: 'Kleines Cohort · wöchentliche Schleife · Runbooks an der Wand.',
+    label: 'Phase drei: Begrenztes Cohort mit wöchentlichem Feedback und Runbooks.',
+    Visual: VisualPilot,
+  },
+  {
+    n: '04',
+    title: 'Skalieren & beobachten',
+    hint: 'Woche 8+',
+    tag: 'Mehr Standorte · gleicher Stack · SLO-Linie bleibt grün.',
+    label: 'Phase vier: Standorte erweitern und SLOs sowie Demand beobachten.',
+    Visual: VisualScale,
+  },
+]
+
 export function LaunchPathSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = usePrefersReducedMotion()
+  const { lang } = useI18n()
+  const { theme } = useTheme()
+  const phases = lang === 'de' ? phasesDe : phasesEn
 
   useLayoutEffect(() => {
     const section = sectionRef.current
@@ -549,10 +613,20 @@ export function LaunchPathSection() {
             Rollout
           </p>
           <h2 id="launch-heading" className={styles.headline} data-launch-headline>
-            From kickoff to live—<span>without the drama</span>
+            {lang === 'de' ? (
+              <>
+                Vom Kickoff bis Live—<span>ohne Drama</span>
+              </>
+            ) : (
+              <>
+                From kickoff to live—<span>without the drama</span>
+              </>
+            )}
           </h2>
           <p className={styles.lede} data-launch-lede>
-            Read the phases visually—then dive deeper with your team when you&apos;re ready.
+            {lang === 'de'
+              ? 'Lesen Sie die Phasen visuell—und gehen Sie mit Ihrem Team dann tiefer, wenn Sie bereit sind.'
+              : 'Read the phases visually—then dive deeper with your team when you&apos;re ready.'}
           </p>
         </header>
 
@@ -572,7 +646,7 @@ export function LaunchPathSection() {
                   <span className={styles.phaseHint}>{p.hint}</span>
                 </div>
                 <div className={styles.visualWrap} data-launch-visual>
-                  <Visual uid={i} />
+                  <Visual uid={i} lang={lang} theme={theme} />
                 </div>
                 <h3 className={styles.title}>{p.title}</h3>
                 <p className={styles.tagline}>{p.tag}</p>

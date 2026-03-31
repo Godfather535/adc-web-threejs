@@ -1,11 +1,17 @@
 import { useLayoutEffect, useRef, type ComponentType } from 'react'
 import { gsap } from '../../lib/gsap'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useI18n } from '../../i18n/useI18n'
+import { useTheme } from '../../context/ThemeContext'
 import styles from './TrustScaleSection.module.css'
 
 const easeNone = 'none'
 
-function TrustVisualConsent() {
+type Theme = 'dark' | 'light'
+type TrustVisualProps = { theme: Theme }
+
+function TrustVisualConsent({ theme }: TrustVisualProps) {
+  const isLight = theme === 'light'
   return (
     <svg viewBox="0 0 280 160" preserveAspectRatio="xMidYMid meet" aria-hidden>
       <defs>
@@ -14,16 +20,16 @@ function TrustVisualConsent() {
           <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.35" />
         </linearGradient>
       </defs>
-      <circle cx="140" cy="78" r="52" fill="none" stroke="url(#tvConsentRing)" strokeWidth="1" opacity="0.45" />
-      <circle cx="140" cy="78" r="36" fill="none" stroke="rgba(0,255,198,0.2)" strokeWidth="0.75" strokeDasharray="4 6" />
+      <circle cx="140" cy="78" r="52" fill="none" stroke="url(#tvConsentRing)" strokeWidth="1" opacity={isLight ? 0.68 : 0.45} />
+      <circle cx="140" cy="78" r="36" fill="none" stroke={isLight ? 'rgba(14,165,233,0.28)' : 'rgba(0,255,198,0.2)'} strokeWidth="0.75" strokeDasharray="4 6" />
       <path
         d="M 140 52 L 140 68 M 132 60 L 148 60"
-        stroke="rgba(0,255,198,0.5)"
+        stroke={isLight ? 'rgba(14,165,233,0.58)' : 'rgba(0,255,198,0.5)'}
         strokeWidth="1.2"
         strokeLinecap="round"
         fill="none"
       />
-      <rect x="124" y="70" width="32" height="26" rx="4" fill="rgba(0,255,198,0.12)" stroke="rgba(0,255,198,0.45)" strokeWidth="1" />
+      <rect x="124" y="70" width="32" height="26" rx="4" fill={isLight ? 'rgba(14,165,233,0.12)' : 'rgba(0,255,198,0.12)'} stroke={isLight ? 'rgba(14,165,233,0.4)' : 'rgba(0,255,198,0.45)'} strokeWidth="1" />
       <path d="M 132 82 L 136 86 L 148 74" fill="none" stroke="#00ffc6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="62" cy="48" r="6" fill="rgba(59,130,246,0.35)" stroke="rgba(59,130,246,0.6)" />
       <circle cx="218" cy="52" r="6" fill="rgba(139,92,246,0.3)" stroke="rgba(139,92,246,0.55)" />
@@ -31,14 +37,15 @@ function TrustVisualConsent() {
       <path
         d="M 68 50 Q 100 62 124 78 M 212 54 Q 180 66 156 78 M 58 104 Q 90 92 124 88"
         fill="none"
-        stroke="rgba(255,255,255,0.12)"
+        stroke={isLight ? 'rgba(30,41,59,0.24)' : 'rgba(255,255,255,0.12)'}
         strokeWidth="0.9"
       />
     </svg>
   )
 }
 
-function TrustVisualAudit() {
+function TrustVisualAudit({ theme }: TrustVisualProps) {
+  const isLight = theme === 'light'
   return (
     <svg viewBox="0 0 280 160" preserveAspectRatio="xMidYMid meet" aria-hidden>
       <defs>
@@ -47,42 +54,43 @@ function TrustVisualAudit() {
           <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.45" />
         </linearGradient>
       </defs>
-      <rect x="48" y="38" width="184" height="10" rx="2" fill="rgba(255,255,255,0.06)" />
+      <rect x="48" y="38" width="184" height="10" rx="2" fill={isLight ? 'rgba(30,41,59,0.12)' : 'rgba(255,255,255,0.06)'} />
       <rect x="48" y="54" width="140" height="10" rx="2" fill="url(#tvAuditBar)" opacity="0.85" />
-      <rect x="48" y="70" width="168" height="10" rx="2" fill="rgba(255,255,255,0.05)" />
-      <rect x="48" y="86" width="96" height="10" rx="2" fill="rgba(255,255,255,0.05)" />
+      <rect x="48" y="70" width="168" height="10" rx="2" fill={isLight ? 'rgba(30,41,59,0.1)' : 'rgba(255,255,255,0.05)'} />
+      <rect x="48" y="86" width="96" height="10" rx="2" fill={isLight ? 'rgba(30,41,59,0.1)' : 'rgba(255,255,255,0.05)'} />
       <g transform="translate(196, 50)">
         <circle r="14" fill="rgba(59,130,246,0.15)" stroke="rgba(59,130,246,0.5)" strokeWidth="1" />
         <path d="M -4 0 L -1 4 L 6 -5" fill="none" stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </g>
-      <rect x="48" y="108" width="184" height="22" rx="4" fill="rgba(0,0,0,0.35)" stroke="rgba(255,255,255,0.08)" />
-      <text x="56" y="123" fill="rgba(255,255,255,0.25)" fontSize="9" fontFamily="system-ui, sans-serif" letterSpacing="0.12em">
+      <rect x="48" y="108" width="184" height="22" rx="4" fill={isLight ? 'rgba(30,41,59,0.12)' : 'rgba(0,0,0,0.35)'} stroke={isLight ? 'rgba(30,41,59,0.2)' : 'rgba(255,255,255,0.08)'} />
+      <text x="56" y="123" fill={isLight ? 'rgba(51,65,85,0.62)' : 'rgba(255,255,255,0.25)'} fontSize="9" fontFamily="system-ui, sans-serif" letterSpacing="0.12em">
         HASH · TS · ACTOR
       </text>
     </svg>
   )
 }
 
-function TrustVisualResilient() {
+function TrustVisualResilient({ theme }: TrustVisualProps) {
+  const isLight = theme === 'light'
   return (
     <svg viewBox="0 0 280 160" preserveAspectRatio="xMidYMid meet" aria-hidden>
       <path
         d="M 40 118 Q 140 28 240 118"
         fill="none"
-        stroke="rgba(139,92,246,0.25)"
+        stroke={isLight ? 'rgba(59,130,246,0.28)' : 'rgba(139,92,246,0.25)'}
         strokeWidth="1"
       />
-      <rect x="108" y="44" width="64" height="48" rx="6" fill="rgba(139,92,246,0.1)" stroke="rgba(167,139,250,0.45)" strokeWidth="1" />
-      <rect x="118" y="54" width="44" height="8" rx="2" fill="rgba(255,255,255,0.08)" />
-      <rect x="118" y="66" width="32" height="8" rx="2" fill="rgba(255,255,255,0.06)" />
+      <rect x="108" y="44" width="64" height="48" rx="6" fill={isLight ? 'rgba(59,130,246,0.12)' : 'rgba(139,92,246,0.1)'} stroke={isLight ? 'rgba(59,130,246,0.45)' : 'rgba(167,139,250,0.45)'} strokeWidth="1" />
+      <rect x="118" y="54" width="44" height="8" rx="2" fill={isLight ? 'rgba(30,41,59,0.14)' : 'rgba(255,255,255,0.08)'} />
+      <rect x="118" y="66" width="32" height="8" rx="2" fill={isLight ? 'rgba(30,41,59,0.1)' : 'rgba(255,255,255,0.06)'} />
       <rect x="118" y="78" width="38" height="8" rx="2" fill="rgba(0,255,198,0.15)" />
       <circle cx="140" cy="32" r="5" fill="rgba(0,255,198,0.35)" />
-      <path d="M 140 37 L 140 44" stroke="rgba(0,255,198,0.4)" strokeWidth="0.8" />
+      <path d="M 140 37 L 140 44" stroke={isLight ? 'rgba(14,165,233,0.45)' : 'rgba(0,255,198,0.4)'} strokeWidth="0.8" />
       <rect x="52" y="96" width="36" height="40" rx="4" fill="rgba(59,130,246,0.12)" stroke="rgba(59,130,246,0.35)" />
       <rect x="192" y="96" width="36" height="40" rx="4" fill="rgba(59,130,246,0.12)" stroke="rgba(59,130,246,0.35)" />
       <path
         d="M 88 116 L 108 108 M 172 108 L 192 116"
-        stroke="rgba(255,255,255,0.1)"
+        stroke={isLight ? 'rgba(30,41,59,0.18)' : 'rgba(255,255,255,0.1)'}
         strokeWidth="0.8"
       />
       <circle cx="76" cy="124" r="3" fill="#3b82f6" opacity="0.7" className={styles.pulseDot} />
@@ -141,11 +149,11 @@ function AsmE2e() {
   )
 }
 
-const pillars: readonly {
+const pillarsEn: readonly {
   title: string
   tagline: string
   tone: 'cardA' | 'cardB' | 'cardC'
-  Visual: ComponentType
+  Visual: ComponentType<TrustVisualProps>
 }[] = [
   {
     title: 'Consent & lineage',
@@ -167,16 +175,46 @@ const pillars: readonly {
   },
 ]
 
-const assurances = [
+const pillarsDe: typeof pillarsEn = [
+  {
+    title: 'Einwilligung & Herkunft',
+    tagline: 'Policy reist mit jedem Datensatz.',
+    tone: 'cardA',
+    Visual: TrustVisualConsent,
+  },
+  {
+    title: 'Audit-fähige Nachweise',
+    tagline: 'Belege für Zugriff & Exporte.',
+    tone: 'cardB',
+    Visual: TrustVisualAudit,
+  },
+  {
+    title: 'Resiliente Abläufe',
+    tagline: 'Regionen · Transit · Runbooks.',
+    tone: 'cardC',
+    Visual: TrustVisualResilient,
+  },
+]
+
+const assurancesEn = [
   { name: 'mTLS', status: 'Live', statusClass: styles.statusLive, Glyph: AsmTls },
-  { name: 'HIPAA posture', status: 'Ready', statusClass: styles.statusReady, Glyph: AsmHipaa },
+] as const
+
+const assurancesDe = [
+  { name: 'mTLS', status: 'Live', statusClass: styles.statusLive, Glyph: AsmTls },
+  { name: 'HIPAA-Status', status: 'Bereit', statusClass: styles.statusReady, Glyph: AsmHipaa },
   { name: 'SOC 2', status: 'Roadmap', statusClass: styles.statusRoadmap, Glyph: AsmSoc },
-  { name: 'E2E coverage', status: 'Scoped', statusClass: styles.statusReady, Glyph: AsmE2e },
+  { name: 'E2E-Abdeckung', status: 'Eingegrenzt', statusClass: styles.statusReady, Glyph: AsmE2e },
 ] as const
 
 export function TrustScaleSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = usePrefersReducedMotion()
+  const { lang } = useI18n()
+  const { theme } = useTheme()
+
+  const pillars = lang === 'de' ? pillarsDe : pillarsEn
+  const assurances = lang === 'de' ? assurancesDe : assurancesEn
 
   useLayoutEffect(() => {
     const section = sectionRef.current
@@ -320,14 +358,24 @@ export function TrustScaleSection() {
           <div className={styles.headerTop}>
             <span className={styles.rule} data-trust-rule aria-hidden />
             <p className={styles.eyebrow} data-trust-eyebrow>
-              Trust &amp; governance
+              {lang === 'de' ? 'Vertrauen & Governance' : 'Trust & governance'}
             </p>
           </div>
           <h2 id="trust-heading" className={styles.headline} data-trust-headline>
-            Security and clarity, <span className={styles.headlineAccent}>without the drag</span>
+            {lang === 'de' ? (
+              <>
+                Sicherheit und Klarheit, <span className={styles.headlineAccent}>ohne Reibung</span>
+              </>
+            ) : (
+              <>
+                Security and clarity, <span className={styles.headlineAccent}>without the drag</span>
+              </>
+            )}
           </h2>
           <p className={styles.lede} data-trust-lede>
-            Guardrails that keep regulators and athletes both confident—without slowing the team.
+            {lang === 'de'
+              ? 'Leitplanken, die sowohl Regulatoren als auch Athleten überzeugen—ohne das Team auszubremsen.'
+              : 'Guardrails that keep regulators and athletes both confident—without slowing the team.'}
           </p>
         </header>
 
@@ -341,7 +389,7 @@ export function TrustScaleSection() {
                 data-trust-card
               >
                 <div className={styles.cardVisual}>
-                  <V />
+                  <V theme={theme} />
                 </div>
                 <div className={styles.cardBody}>
                   <h3 className={styles.cardTitle}>{p.title}</h3>
@@ -354,7 +402,7 @@ export function TrustScaleSection() {
 
         <div className={styles.strip}>
           <span className={styles.stripLabel} data-trust-strip-label>
-            Assurance surface
+            {lang === 'de' ? 'Absicherungs-Oberfläche' : 'Assurance surface'}
           </span>
           {assurances.map((a) => {
             const G = a.Glyph

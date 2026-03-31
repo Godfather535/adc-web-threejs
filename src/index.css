@@ -7,8 +7,8 @@
   --border: rgba(255, 255, 255, 0.12);
   --text: rgba(255, 255, 255, 0.88);
   --text-muted: rgba(255, 255, 255, 0.55);
-  --sans: 'Open Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --display: 'Open Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sans: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-family: var(--sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,6 +16,17 @@
   -moz-osx-font-smoothing: grayscale;
   color: var(--text);
   background: var(--bg);
+}
+
+html[data-theme='light'] {
+  --bg: #f3f6fb;
+  --glow-primary: #2563eb;
+  --glow-secondary: #7c3aed;
+  --accent: #0ea5a5;
+  --glass: rgba(15, 23, 42, 0.04);
+  --border: rgba(15, 23, 42, 0.14);
+  --text: rgba(15, 23, 42, 0.9);
+  --text-muted: rgba(30, 41, 59, 0.64);
 }
 
 *,
@@ -31,6 +42,141 @@ html {
 body {
   margin: 0;
   min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9999;
+}
+
+/* Cyberpunk glitch overlays during theme swap */
+html[data-theme-transition='true'] body::before {
+  background:
+    linear-gradient(90deg, rgba(0, 255, 198, 0.12), transparent 26%, rgba(59, 130, 246, 0.12) 58%, transparent 78%, rgba(236, 72, 153, 0.12)),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.08) 0px,
+      rgba(255, 255, 255, 0.08) 1px,
+      rgba(0, 0, 0, 0.08) 1px,
+      rgba(0, 0, 0, 0.08) 3px,
+      transparent 3px,
+      transparent 6px
+    );
+  mix-blend-mode: screen;
+  animation: themeGlitchScan 680ms steps(14, end) both;
+}
+
+html[data-theme-transition='true'] body::after {
+  background:
+    radial-gradient(circle at 16% 24%, rgba(0, 255, 198, 0.28), transparent 36%),
+    radial-gradient(circle at 74% 74%, rgba(59, 130, 246, 0.3), transparent 40%),
+    radial-gradient(circle at 50% 40%, rgba(236, 72, 153, 0.22), transparent 44%);
+  mix-blend-mode: plus-lighter;
+  animation: themeGlitchFlash 680ms ease-out both;
+}
+
+html[data-theme-transition='true'] #root {
+  animation: themeGlitchJitter 680ms steps(16, end) both;
+}
+
+html[data-theme-transition='true'][data-theme-transition-dir='light'] #root {
+  filter: saturate(1.08) brightness(1.02);
+}
+
+html[data-theme-transition='true'][data-theme-transition-dir='dark'] #root {
+  filter: saturate(1.16) contrast(1.04);
+}
+
+html[data-theme-transition='true'][data-theme-transition-phase='peak'] body::after {
+  opacity: 0.52;
+}
+
+html[data-theme-transition='true'][data-theme-transition-dir='light'] body::before {
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.16), transparent 28%, rgba(99, 102, 241, 0.14) 62%, transparent 82%, rgba(20, 184, 166, 0.16)),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.12) 0px,
+      rgba(255, 255, 255, 0.12) 1px,
+      rgba(15, 23, 42, 0.08) 1px,
+      rgba(15, 23, 42, 0.08) 3px,
+      transparent 3px,
+      transparent 6px
+    );
+}
+
+html[data-theme-transition='true'][data-theme-transition-dir='dark'] body::before {
+  background:
+    linear-gradient(90deg, rgba(168, 85, 247, 0.18), transparent 24%, rgba(59, 130, 246, 0.14) 56%, transparent 76%, rgba(236, 72, 153, 0.16)),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.08) 0px,
+      rgba(255, 255, 255, 0.08) 1px,
+      rgba(0, 0, 0, 0.1) 1px,
+      rgba(0, 0, 0, 0.1) 3px,
+      transparent 3px,
+      transparent 6px
+    );
+}
+
+html[data-theme-transition='true'][data-theme-transition-dir='light'] body::after {
+  background:
+    radial-gradient(circle at 20% 18%, rgba(56, 189, 248, 0.3), transparent 38%),
+    radial-gradient(circle at 78% 76%, rgba(37, 99, 235, 0.26), transparent 40%),
+    radial-gradient(circle at 52% 48%, rgba(20, 184, 166, 0.16), transparent 42%);
+}
+
+html[data-theme-transition='true'][data-theme-transition-dir='dark'] body::after {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(168, 85, 247, 0.3), transparent 36%),
+    radial-gradient(circle at 76% 74%, rgba(59, 130, 246, 0.24), transparent 40%),
+    radial-gradient(circle at 54% 46%, rgba(236, 72, 153, 0.18), transparent 42%);
+}
+
+@keyframes themeGlitchScan {
+  0% { opacity: 0; transform: translateY(-10%) skewX(-2deg); }
+  12% { opacity: 0.52; transform: translateY(-2%) skewX(1deg); }
+  28% { opacity: 0.22; transform: translateY(6%) skewX(-1deg); }
+  42% { opacity: 0.44; transform: translateY(-3%) skewX(2deg); }
+  62% { opacity: 0.2; transform: translateY(8%) skewX(-2deg); }
+  100% { opacity: 0; transform: translateY(12%) skewX(0deg); }
+}
+
+@keyframes themeGlitchFlash {
+  0% { opacity: 0; filter: saturate(1.1) hue-rotate(0deg); }
+  20% { opacity: 0.4; filter: saturate(1.9) hue-rotate(-12deg); }
+  48% { opacity: 0.2; filter: saturate(1.45) hue-rotate(12deg); }
+  100% { opacity: 0; filter: saturate(1) hue-rotate(0deg); }
+}
+
+@keyframes themeGlitchJitter {
+  0% { transform: translate3d(0, 0, 0); filter: contrast(1) hue-rotate(0deg); }
+  8% { transform: translate3d(-1px, 0, 0); }
+  16% { transform: translate3d(1px, 0, 0); }
+  26% { transform: translate3d(-3px, 1px, 0); filter: contrast(1.06) hue-rotate(-4deg); }
+  38% { transform: translate3d(2px, -1px, 0); }
+  54% { transform: translate3d(-1px, 1px, 0); filter: contrast(1.03) hue-rotate(4deg); }
+  72% { transform: translate3d(1px, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); filter: contrast(1) hue-rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme-transition='true'] body::before,
+  html[data-theme-transition='true'] body::after {
+    animation: none;
+    opacity: 0.16;
+  }
+
+  html[data-theme-transition='true'] #root {
+    animation: none;
+  }
 }
 
 /* Non-static positioning helps ScrollTrigger (and other scroll observers) measure correctly */

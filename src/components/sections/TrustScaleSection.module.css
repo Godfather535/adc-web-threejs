@@ -349,3 +349,67 @@
     opacity: 0.75;
   }
 }
+
+:global(html[data-theme='light']) .section {
+  background: linear-gradient(180deg, #f6fbff 0%, #eef5fc 100%);
+}
+
+:global(html[data-theme='light']) .headline,
+:global(html[data-theme='light']) .cardTitle,
+:global(html[data-theme='light']) .assuranceName {
+  color: rgba(15, 23, 42, 0.9);
+}
+
+:global(html[data-theme='light']) .lede,
+:global(html[data-theme='light']) .cardTagline,
+:global(html[data-theme='light']) .stripLabel {
+  color: rgba(30, 41, 59, 0.72);
+}
+
+:global(html[data-theme='light']) .card,
+:global(html[data-theme='light']) .strip,
+:global(html[data-theme='light']) .assuranceItem {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+:global(html[data-theme='light']) .card {
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.45) inset;
+}
+
+:global(html[data-theme='light']) .cardVisual {
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.07) 0%, rgba(37, 99, 235, 0.01) 100%);
+}
+
+:global(html[data-theme='light']) .cardVisual svg {
+  filter: contrast(1.18) saturate(1.22) brightness(0.9);
+}
+
+:global(html[data-theme='light']) .headlineAccent {
+  background: linear-gradient(115deg, #1e293b 0%, #2563eb 52%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+:global(html[data-theme='light']) .strip {
+  border-style: solid;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+:global(html[data-theme='light']) .assuranceItem {
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+:global(html[data-theme='light']) .assuranceGlyph {
+  opacity: 1;
+}
+
+:global(html[data-theme='light']) .assuranceGlyph svg {
+  filter: contrast(1.14) saturate(1.2);
+}
+
+:global(html[data-theme='light']) .assuranceStatus {
+  color: rgba(15, 23, 42, 0.8);
+}

@@ -2,9 +2,8 @@ import { useLayoutEffect, useRef, type PointerEventHandler } from 'react'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { useDemoModal } from '../../context/DemoModalContext'
+import { useI18n } from '../../i18n/useI18n'
 import styles from './ClosingCTASection.module.css'
-
-const chips = ['≤1 biz-day reply', 'BAA-ready', 'Solutions + eng'] as const
 
 export function ClosingCTASection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -12,6 +11,8 @@ export function ClosingCTASection() {
   const demoBtnRef = useRef<HTMLButtonElement>(null)
   const magneticWrapRef = useRef<HTMLDivElement>(null)
   const { openDemoModal } = useDemoModal()
+  const { t } = useI18n()
+  const chips = t<readonly string[]>('cta.chips')
   const magneticX = useRef<((v: number) => void) | null>(null)
   const magneticY = useRef<((v: number) => void) | null>(null)
   const reduceMotion = usePrefersReducedMotion()
@@ -323,24 +324,24 @@ export function ClosingCTASection() {
 
           <div className={styles.panelInner}>
             <p className={styles.eyebrow} data-cta-eyebrow>
-              Contact us
+              {t<string>('cta.eyebrow')}
             </p>
             <h2 id="cta-heading" className={styles.headline}>
               <span className={styles.hWord} data-cta-word>
-                Ready
+                {t<string>('cta.wordReady')}
               </span>
               <span className={styles.hWord} data-cta-word>
-                when
+                {t<string>('cta.wordWhen')}
               </span>
               <span className={`${styles.hWord} ${styles.headGrad}`} data-cta-word>
-                you
+                {t<string>('cta.wordYou')}
               </span>
               <span className={`${styles.hWord} ${styles.headGrad}`} data-cta-word>
-                are
+                {t<string>('cta.wordAre')}
               </span>
             </h2>
             <p className={styles.lede} data-cta-lede>
-              Book a demo, walk through security, or map your rollout—we typically respond within one business day.
+              {t<string>('cta.lede')}
             </p>
             <div className={styles.chips}>
               {chips.map((c) => (
@@ -363,11 +364,11 @@ export function ClosingCTASection() {
                   data-cta-action
                   onClick={() => openDemoModal(demoBtnRef.current)}
                 >
-                  Request a demo
+                  {t<string>('cta.requestDemo')}
                 </button>
               </div>
               <a href="#footer" className={styles.link} data-cta-action>
-                Get in touch
+                {t<string>('cta.getInTouch')}
               </a>
             </div>
           </div>

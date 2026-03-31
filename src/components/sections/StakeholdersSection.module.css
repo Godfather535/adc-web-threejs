@@ -396,3 +396,96 @@
     transform: none;
   }
 }
+
+:global(html[data-theme='light']) .section {
+  background: linear-gradient(180deg, #eff6fd 0%, #f7fbff 100%);
+}
+
+:global(html[data-theme='light']) .headline,
+:global(html[data-theme='light']) .cellTitle,
+:global(html[data-theme='light']) .photoLabel {
+  color: rgba(15, 23, 42, 0.9);
+}
+
+:global(html[data-theme='light']) .lede,
+:global(html[data-theme='light']) .cellCopy,
+:global(html[data-theme='light']) .pill,
+:global(html[data-theme='light']) .photoTag {
+  color: rgba(30, 41, 59, 0.72);
+}
+
+:global(html[data-theme='light']) .cell,
+:global(html[data-theme='light']) .pill {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+:global(html[data-theme='light']) .cell {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 251, 255, 0.94) 100%);
+  border-color: rgba(15, 23, 42, 0.16);
+  box-shadow:
+    0 10px 24px rgba(15, 23, 42, 0.09),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+:global(html[data-theme='light']) .photo {
+  border-color: rgba(37, 99, 235, 0.26);
+  box-shadow:
+    0 20px 42px rgba(30, 64, 175, 0.16),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+:global(html[data-theme='light']) .photoA {
+  background:
+    linear-gradient(165deg, rgba(59, 130, 246, 0.26) 0%, transparent 52%),
+    linear-gradient(45deg, #1d4b92 0%, #1e3a6a 58%, #233a66 100%);
+}
+
+:global(html[data-theme='light']) .photoB {
+  background:
+    linear-gradient(-18deg, rgba(45, 212, 191, 0.22) 0%, transparent 42%),
+    linear-gradient(135deg, #14384f 0%, #17324b 52%, #1a3550 100%);
+}
+
+:global(html[data-theme='light']) .photoVignette {
+  background: radial-gradient(
+    ellipse 85% 70% at 50% 38%,
+    transparent 0%,
+    rgba(37, 99, 235, 0.06) 52%,
+    rgba(30, 64, 175, 0.18) 100%
+  );
+}
+
+:global(html[data-theme='light']) .photoGrain {
+  opacity: 0.04;
+}
+
+:global(html[data-theme='light']) .photoArtSvg {
+  filter: saturate(1.05) contrast(1.08) brightness(1.02);
+}
+
+:global(html[data-theme='light']) .photoTag {
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(37, 99, 235, 0.2);
+  color: rgba(30, 64, 175, 0.88);
+}
+
+:global(html[data-theme='light']) .photoLabel {
+  color: rgba(241, 245, 249, 0.96);
+  text-shadow: 0 3px 16px rgba(2, 6, 23, 0.45);
+}
+
+:global(html[data-theme='light']) .pill {
+  border-color: rgba(15, 23, 42, 0.16);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+:global(html[data-theme='light']) .cellCopy {
+  color: rgba(30, 41, 59, 0.78);
+}
+
+:global(html[data-theme='light']) .headlineEm {
+  background: linear-gradient(120deg, #334155 0%, #0ea5a5 52%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}

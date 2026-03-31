@@ -1,40 +1,73 @@
 import { forwardRef, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { gsap } from '../../lib/gsap'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useI18n } from '../../i18n/useI18n'
 import styles from './QnASection.module.css'
 
-const qaItems: readonly { q: string; a: ReactNode }[] = [
-  {
-    q: 'How does ADC fit alongside our existing EMR or roster tools?',
-    a: 'ADC sits in the orchestration layer: it normalizes demand signals, scheduling constraints, and capacity rules, then syncs deltas to the systems your teams already use. You keep source-of-truth where it belongs—we reduce duplicate entry and drift.',
-  },
-  {
-    q: 'What integrations are available out of the box?',
-    a: 'We ship OpenAPI surfaces, signed webhooks, and roster snapshot endpoints so you can wire HRIS, access control, and clinical workflows without bespoke glue code. Tell us your stack during onboarding and we map the fastest path.',
-  },
-  {
-    q: 'Where is data processed and how is access controlled?',
-    a: 'Deployments are region-aware with strict tenant isolation, least-privilege service accounts, and audit-friendly change trails. Encryption in transit and at rest is standard; stricter BAA-aligned configurations are available for regulated environments.',
-  },
-  {
-    q: 'Can we start with a single site and expand later?',
-    a: 'Yes. Roll out to one facility or cohort, validate workflows and reporting, then promote the same policies org-wide. Feature flags and staged sync help you avoid big-bang cutovers.',
-  },
-  {
-    q: 'How do webhooks and retries behave under load?',
-    a: 'Deliveries are signed for verification, idempotency keys protect against double-processing, and backoff with dead-letter visibility keeps operators informed instead of silently dropping events.',
-  },
-  {
-    q: 'Who do we contact for a demo or architecture review?',
-    a: (
-      <>
-        Use <a href="#cta">Request a demo</a> in the section below, or reach out through your account team.
-        We’ll walk through trust controls, integration surfaces, and a rollout plan matched to your governance
-        needs.
-      </>
-    ),
-  },
-]
+const qaItemsByLang: Record<'en' | 'de', readonly { q: string; a: ReactNode }[]> = {
+  en: [
+    {
+      q: 'How does ADC fit alongside our existing EMR or roster tools?',
+      a: 'ADC sits in the orchestration layer: it normalizes demand signals, scheduling constraints, and capacity rules, then syncs deltas to the systems your teams already use. You keep source-of-truth where it belongs—we reduce duplicate entry and drift.',
+    },
+    {
+      q: 'What integrations are available out of the box?',
+      a: 'We ship OpenAPI surfaces, signed webhooks, and roster snapshot endpoints so you can wire HRIS, access control, and clinical workflows without bespoke glue code. Tell us your stack during onboarding and we map the fastest path.',
+    },
+    {
+      q: 'Where is data processed and how is access controlled?',
+      a: 'Deployments are region-aware with strict tenant isolation, least-privilege service accounts, and audit-friendly change trails. Encryption in transit and at rest is standard; stricter BAA-aligned configurations are available for regulated environments.',
+    },
+    {
+      q: 'Can we start with a single site and expand later?',
+      a: 'Yes. Roll out to one facility or cohort, validate workflows and reporting, then promote the same policies org-wide. Feature flags and staged sync help you avoid big-bang cutovers.',
+    },
+    {
+      q: 'How do webhooks and retries behave under load?',
+      a: 'Deliveries are signed for verification, idempotency keys protect against double-processing, and backoff with dead-letter visibility keeps operators informed instead of silently dropping events.',
+    },
+    {
+      q: 'Who do we contact for a demo or architecture review?',
+      a: (
+        <>
+          Use <a href="#cta">Request a demo</a> in the section below, or reach out through your account team.
+          We’ll walk through trust controls, integration surfaces, and a rollout plan matched to your governance needs.
+        </>
+      ),
+    },
+  ],
+  de: [
+    {
+      q: 'Wie passt ADC zu unseren bestehenden EMR- oder Roster-Tools?',
+      a: 'ADC sitzt in der Orchestrierungsschicht: Es normalisiert Demand-Signale, Scheduling-Einschränkungen und Capacity-Regeln und synchronisiert anschließend nur die Deltas mit den Systemen, die Ihr Team bereits nutzt. So bleibt die „Quelle der Wahrheit“ dort, wo sie hingehört—Sie vermeiden doppelte Eingaben und Drift.',
+    },
+    {
+      q: 'Welche Integrationen gibt es direkt ab Werk?',
+      a: 'Wir liefern OpenAPI-Oberflächen, signierte Webhooks und Roster-Snapshot-Endpunkte. Damit binden Sie HRIS, Zugriffskontrolle und klinische Workflows ein—ohne aufwändige Zusatz-„Glue“-Logik. Teilen Sie uns Ihren Stack beim Onboarding mit, dann zeigen wir den schnellsten Weg.',
+    },
+    {
+      q: 'Wo wird Datenverarbeitung durchgeführt und wie wird der Zugriff gesteuert?',
+      a: 'Die Bereitstellung ist region-bewusst mit strikter Mandanten-Isolation, Least-Privilege Service-Accounts und revisionsfreundlichen Änderungsnachweisen. Verschlüsselung in transit und at rest ist Standard; strengere BAA-orientierte Konfigurationen sind für regulierte Umgebungen verfügbar.',
+    },
+    {
+      q: 'Können wir mit einem Standort starten und später ausbauen?',
+      a: 'Ja. Starten Sie mit einer Einrichtung oder einem Cohort, prüfen Sie Workflows und Reporting und rollen Sie danach die gleichen Policies unternehmensweit aus. Feature-Flags und gestufte Synchronisation helfen Ihnen, Big-Bang-Cutovers zu vermeiden.',
+    },
+    {
+      q: 'Wie verhalten sich Webhooks und Retries unter Last?',
+      a: 'Zustellungen sind signiert zur Verifikation, Idempotency-Keys schützen vor doppelter Verarbeitung, und Backoff mit Dead-Letter-Transparenz informiert Operatoren, statt Events stillschweigend zu verlieren.',
+    },
+    {
+      q: 'Wen kontaktieren wir für eine Demo oder Architektur-Review?',
+      a: (
+        <>
+          Nutzen Sie unten den Bereich <a href="#cta">Demo anfragen</a>, oder sprechen Sie Ihr Account-Team an.
+          Wir gehen mit Ihnen durch Trust-Kontrollen, Integrationspunkte und einen Rollout-Plan passend zu Ihren Governance-Anforderungen.
+        </>
+      ),
+    },
+  ],
+}
 
 const QnaOrnament = forwardRef<SVGSVGElement>(function QnaOrnament(_props, ref) {
   return (
@@ -255,6 +288,7 @@ export function QnASection() {
   const sectionRef = useRef<HTMLElement>(null)
   const ornamentRef = useRef<SVGSVGElement>(null)
   const reduceMotion = usePrefersReducedMotion()
+  const { lang } = useI18n()
 
   useLayoutEffect(() => {
     const section = sectionRef.current
@@ -358,18 +392,28 @@ export function QnASection() {
       <div className={styles.inner}>
         <div className={styles.copy}>
           <p className={styles.eyebrow} data-qna-eyebrow>
-            Q&amp;A
+            {lang === 'de' ? 'Fragen & Antworten' : 'Q&A'}
           </p>
           <h2 id="qna-heading" className={styles.headline} data-qna-headline>
-            Answers before <span>you ask twice</span>
+            {lang === 'de' ? (
+              <>
+                Antworten, bevor <span>Sie zweimal fragen</span>
+              </>
+            ) : (
+              <>
+                Answers before <span>you ask twice</span>
+              </>
+            )}
           </h2>
           <p className={styles.lede} data-qna-lede>
-            Straight talk on integrations, data handling, and rollout—so procurement and engineering stay aligned.
+            {lang === 'de'
+              ? 'Klartext zu Integrationen, Datenhandhabung und Rollout—damit Einkauf und Engineering in Linie bleiben.'
+              : 'Straight talk on integrations, data handling, and rollout—so procurement and engineering stay aligned.'}
           </p>
         </div>
 
         <div className={styles.list}>
-          {qaItems.map((item, index) => (
+          {(lang === 'de' ? qaItemsByLang.de : qaItemsByLang.en).map((item, index) => (
             <QnaAccordionItem key={item.q} q={item.q} a={item.a} index={index} reduceMotion={reduceMotion} />
           ))}
         </div>

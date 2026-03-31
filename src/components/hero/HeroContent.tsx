@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { useMagneticButton } from '../../hooks/useMagneticButton'
 import styles from './Hero.module.css'
+import { useI18n } from '../../i18n/useI18n'
 
 const ease = 'power2.out'
 
@@ -14,6 +15,9 @@ function PlayGlyph() {
 }
 
 export function HeroContent() {
+  const { t } = useI18n()
+  const headlineSegments = t<Array<{ text: string; kind: 'plain' | 'grad' }>>('hero.headlineSegments')
+
   const rootRef = useRef<HTMLDivElement | null>(null)
   const kickerPulseRef = useRef<HTMLSpanElement | null>(null)
   const playIconRef = useRef<HTMLSpanElement | null>(null)
@@ -153,28 +157,26 @@ export function HeroContent() {
     <div ref={rootRef} className={styles.contentColumn} data-hero-content>
       <div className={styles.kicker} data-kicker>
         <span ref={kickerPulseRef} className={styles.kickerPulse} aria-hidden />
-        <span className={styles.kickerText}>ADC</span>
+        <span className={styles.kickerText}>{t<string>('hero.kicker')}</span>
         <span className={styles.kickerLine} data-kicker-line aria-hidden />
       </div>
 
       <h1 className={styles.headline}>
-        <span data-hero-word>The </span>
-        <span data-hero-word>platform </span>
-        <span data-hero-word>for </span>
-        <span data-hero-word>the </span>
-        <span className={styles.gradientWord} data-hero-word>
-          competitive sport
-        </span>
-        <span data-hero-word> of </span>
-        <span className={styles.gradientWord} data-hero-word>
-          tomorrow
-        </span>
-        <span data-hero-word>.</span>
+        {headlineSegments.map((seg, idx) =>
+          seg.kind === 'grad' ? (
+            <span key={idx} className={styles.gradientWord} data-hero-word>
+              {seg.text}
+            </span>
+          ) : (
+            <span key={idx} data-hero-word>
+              {seg.text}
+            </span>
+          ),
+        )}
       </h1>
 
       <p className={styles.subtext} data-sub>
-        Optimize athlete development with data-driven insight, secure communication, and
-        decentralized infrastructure—built for organizations that cannot compromise on trust.
+        {t<string>('hero.subtext')}
       </p>
 
       <div className={styles.actions} data-actions>
@@ -185,7 +187,7 @@ export function HeroContent() {
           onPointerLeave={onPrimaryLeave}
         >
           <button type="button" className={styles.primary}>
-            Get started
+            {t<string>('hero.primaryAction')}
           </button>
         </div>
         <div
@@ -199,7 +201,7 @@ export function HeroContent() {
               <span ref={playIconRef} className={styles.playIcon}>
                 <PlayGlyph />
               </span>
-              Watch demo
+              {t<string>('hero.secondaryAction')}
             </span>
           </button>
         </div>

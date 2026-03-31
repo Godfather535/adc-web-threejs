@@ -311,3 +311,24 @@
   stroke-width: 0.75;
   stroke-linecap: round;
 }
+
+:global(html[data-theme='light']) .section {
+  background: linear-gradient(180deg, #f6faff 0%, #edf4fc 100%);
+}
+
+:global(html[data-theme='light']) .panel {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 250, 255, 0.9) 100%);
+}
+
+:global(html[data-theme='light']) .headline,
+:global(html[data-theme='light']) .lede,
+:global(html[data-theme='light']) .chip,
+:global(html[data-theme='light']) .link {
+  color: rgba(15, 23, 42, 0.85);
+}
+
+:global(html[data-theme='light']) .chip {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: rgba(255, 255, 255, 0.88);
+}

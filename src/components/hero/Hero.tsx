@@ -6,6 +6,7 @@ import { useIsMobile } from '../../hooks/useIsMobile'
 import { HeroCanvasFallback } from './HeroCanvasFallback'
 import { HeroContent } from './HeroContent'
 import { HeroErrorBoundary } from './HeroErrorBoundary'
+import { useTheme } from '../../context/ThemeContext'
 import styles from './Hero.module.css'
 
 const HeroScene = lazy(() => import('./HeroScene'))
@@ -16,6 +17,7 @@ export function Hero() {
   const pointerRef = useMouseParallax()
   const isMobile = useIsMobile()
   const { ref: heroRef } = useScrollReveal()
+  const { theme } = useTheme()
 
   useLayoutEffect(() => {
     const hero = heroRef.current
@@ -152,7 +154,7 @@ export function Hero() {
               <div className={styles.viewportInner}>
                 <div className={styles.canvasWrap}>
                   <Suspense fallback={<HeroCanvasFallback />}>
-                    <HeroScene pointerRef={pointerRef} isMobile={isMobile} />
+                    <HeroScene pointerRef={pointerRef} isMobile={isMobile} theme={theme} />
                   </Suspense>
                 </div>
               </div>

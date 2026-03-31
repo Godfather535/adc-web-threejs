@@ -177,3 +177,49 @@
 .answerText a:hover {
   text-decoration: underline;
 }
+
+:global(html[data-theme='light']) .section {
+  background: linear-gradient(180deg, #f7fbff 0%, #eff5fc 100%);
+}
+
+:global(html[data-theme='light']) .eyebrow {
+  color: rgba(37, 99, 235, 0.92);
+}
+
+:global(html[data-theme='light']) .headline,
+:global(html[data-theme='light']) .summary {
+  color: rgba(15, 23, 42, 0.9);
+}
+
+:global(html[data-theme='light']) .headline span {
+  background: linear-gradient(120deg, #334155 0%, #2563eb 58%, #0ea5a5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+:global(html[data-theme='light']) .lede,
+:global(html[data-theme='light']) .answerText,
+:global(html[data-theme='light']) .chevron {
+  color: rgba(30, 41, 59, 0.76);
+}
+
+:global(html[data-theme='light']) .item {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.95) 0%, rgba(247, 251, 255, 0.92) 100%);
+  box-shadow:
+    0 10px 26px rgba(15, 23, 42, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+:global(html[data-theme='light']) .summary:hover {
+  color: rgba(15, 23, 42, 1);
+}
+
+:global(html[data-theme='light']) .chevronWrap {
+  border-color: rgba(15, 23, 42, 0.14);
+  background: rgba(15, 23, 42, 0.04);
+}
+
+:global(html[data-theme='light']) .answerText a {
+  color: #0f766e;
+}

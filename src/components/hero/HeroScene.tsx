@@ -13,6 +13,7 @@ import { ParticleField } from './ParticleField'
 type Props = {
   pointerRef: MutableRefObject<ParallaxPointer>
   isMobile: boolean
+  theme: 'dark' | 'light'
 }
 
 function SceneTicker() {
@@ -107,8 +108,9 @@ function LightBeams() {
   )
 }
 
-function SceneContent({ pointerRef, isMobile }: Props) {
+function SceneContent({ pointerRef, isMobile, theme }: Props) {
   const parallax = useRef<THREE.Group>(null)
+  const isLight = theme === 'light'
 
   useFrame(() => {
     const g = parallax.current
@@ -123,21 +125,21 @@ function SceneContent({ pointerRef, isMobile }: Props) {
       <PerspectiveCamera makeDefault position={[0, 0.62, 5.15]} fov={42} />
       <CameraRig />
       <SceneTicker />
-      <color attach="background" args={['#070b14']} />
+      <color attach="background" args={[isLight ? '#0b1220' : '#070b14']} />
 
-      <ambientLight intensity={0.35} />
+      <ambientLight intensity={isLight ? 0.4 : 0.35} />
       <directionalLight
         position={[-4, 3.5, 2]}
-        intensity={0.85}
-        color="#8b5cf6"
+        intensity={isLight ? 0.78 : 0.85}
+        color={isLight ? '#7c3aed' : '#8b5cf6'}
       />
-      <pointLight position={[4, 2, 3]} intensity={0.6} color="#3b82f6" />
+      <pointLight position={[4, 2, 3]} intensity={isLight ? 0.56 : 0.6} color="#3b82f6" />
       <spotLight
         position={[0, 5, 2]}
         angle={0.35}
         penumbra={0.6}
-        intensity={1.1}
-        color="#ffffff"
+        intensity={isLight ? 0.95 : 1.1}
+        color={isLight ? '#ffffff' : '#ffffff'}
         castShadow={false}
       />
 
@@ -165,12 +167,12 @@ function SceneContent({ pointerRef, isMobile }: Props) {
       {!isMobile && (
         <EffectComposer multisampling={0}>
           <Bloom
-            luminanceThreshold={0.25}
+            luminanceThreshold={isLight ? 0.27 : 0.25}
             mipmapBlur
-            intensity={0.85}
+            intensity={isLight ? 0.72 : 0.85}
             radius={0.45}
           />
-          <Vignette eskil={false} offset={0.12} darkness={0.45} />
+          <Vignette eskil={false} offset={0.12} darkness={isLight ? 0.36 : 0.45} />
         </EffectComposer>
       )}
     </>
@@ -200,7 +202,7 @@ function SweepLight() {
   )
 }
 
-export default function HeroScene({ pointerRef, isMobile }: Props) {
+export default function HeroScene({ pointerRef, isMobile, theme }: Props) {
   return (
     <Canvas
       gl={{
@@ -215,7 +217,7 @@ export default function HeroScene({ pointerRef, isMobile }: Props) {
       style={{ width: '100%', height: '100%', display: 'block' }}
     >
       <Suspense fallback={null}>
-        <SceneContent pointerRef={pointerRef} isMobile={isMobile} />
+        <SceneContent pointerRef={pointerRef} isMobile={isMobile} theme={theme} />
       </Suspense>
     </Canvas>
   )

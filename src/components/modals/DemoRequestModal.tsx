@@ -12,6 +12,7 @@ import { createPortal } from 'react-dom'
 import { gsap } from '../../lib/gsap'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import styles from './DemoRequestModal.module.css'
+import { useI18n } from '../../i18n/useI18n'
 
 const DEMO_MAIL = 'demo-requests@adc.example'
 
@@ -21,7 +22,7 @@ type Props = {
   onRequestClose: () => void
 }
 
-function buildMailto(fd: FormData): string {
+function buildMailto(fd: FormData, lang: 'en' | 'de'): string {
   const name = String(fd.get('fullName') ?? '').trim()
   const org = String(fd.get('organization') ?? '').trim()
   const email = String(fd.get('email') ?? '').trim()
@@ -29,15 +30,34 @@ function buildMailto(fd: FormData): string {
   const phone = String(fd.get('phone') ?? '').trim()
   const notes = String(fd.get('notes') ?? '').trim()
 
+  const labels =
+    lang === 'de'
+      ? {
+          name: 'Name',
+          email: 'E-Mail',
+          org: 'Organisation',
+          role: 'Rolle / Position',
+          phone: 'Telefon',
+          notes: 'Ziele / Notizen',
+        }
+      : {
+          name: 'Name',
+          email: 'Email',
+          org: 'Organization',
+          role: 'Role',
+          phone: 'Phone',
+          notes: 'Goals / notes',
+        }
+
   const subject = encodeURIComponent(`ADC demo request — ${org || name || 'Inquiry'}`)
   const body = encodeURIComponent(
     [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Organization: ${org}`,
-      `Role: ${role}`,
-      phone ? `Phone: ${phone}` : null,
-      notes ? `\nGoals / notes:\n${notes}` : null,
+      `${labels.name}: ${name}`,
+      `${labels.email}: ${email}`,
+      `${labels.org}: ${org}`,
+      `${labels.role}: ${role}`,
+      phone ? `${labels.phone}: ${phone}` : null,
+      notes ? `\n${labels.notes}:\n${notes}` : null,
     ]
       .filter(Boolean)
       .join('\n'),
@@ -51,6 +71,24 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
   const [success, setSuccess] = useState(false)
   const [mailtoHref, setMailtoHref] = useState('')
   const reduceMotion = usePrefersReducedMotion()
+  const { lang, t } = useI18n()
+  const placeholders = lang === 'de'
+    ? {
+        fullName: 'Max Mustermann',
+        email: 'name@organisation.de',
+        organization: 'Ihre Organisation oder Einrichtung',
+        role: 'Leitung Operations',
+        phone: '+49 …',
+        notes: 'Integrationen, Zeitplan, Compliance-Kontext…',
+      }
+    : {
+        fullName: 'Ada Chen',
+        email: 'you@organization.com',
+        organization: 'Your org or facility',
+        role: 'Director of Operations',
+        phone: '+1 …',
+        notes: 'Integrations, timeline, compliance context…',
+      }
 
   const rootRef = useRef<HTMLDivElement>(null)
   const backdropRef = useRef<HTMLDivElement>(null)
@@ -288,7 +326,7 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
       return
     }
 
-    setMailtoHref(buildMailto(fd))
+    setMailtoHref(buildMailto(fd, lang))
     setSuccess(true)
 
     if (!reduceMotion && panelWrapRef.current) {
@@ -343,16 +381,16 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
 
           <div className={styles.header}>
             <div className={styles.titleBlock}>
-              <p className={styles.kicker}>Secure channel</p>
+              <p className={styles.kicker}>{t<string>('cta.modal.kicker')}</p>
               <h2 id="demo-modal-title" className={styles.title}>
-                Request a demo
+                {t<string>('cta.modal.title')}
               </h2>
-              <p className={styles.sub}>Encrypted intent only—we use this to route your request to solutions.</p>
+              <p className={styles.sub}>{t<string>('cta.modal.sub')}</p>
             </div>
             <button
               type="button"
               className={styles.closeBtn}
-              aria-label="Close dialog"
+              aria-label={t<string>('cta.modal.close')}
               onClick={requestClose}
             >
               ×
@@ -365,25 +403,23 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
                 <div className={styles.successIcon} aria-hidden>
                   ✓
                 </div>
-                <h3 className={styles.successTitle}>Request captured</h3>
-                <p className={styles.successText}>
-                  We&apos;ll follow up within one business day. You can also send the same details through your mail
-                  client.
-                </p>
+                <h3 className={styles.successTitle}>{t<string>('cta.successTitle')}</h3>
+                <p className={styles.successText}>{t<string>('cta.successText')}</p>
                 {mailtoHref ? (
                   <a className={styles.mailtoLink} href={mailtoHref}>
-                    Open email draft
+                    {t<string>('cta.successOpenEmail')}
                   </a>
                 ) : null}
                 <button type="button" className={`${styles.submit} ${styles.successClose}`} onClick={requestClose}>
-                  Done
+                  {t<string>('cta.successDone')}
                 </button>
               </div>
             ) : (
               <form ref={formRef} className={styles.form} onSubmit={onSubmit} noValidate>
                 <div className={styles.field} data-demo-field>
                   <label className={styles.label} htmlFor="demo-fullName">
-                    Full name<span className={styles.required}>*</span>
+                    {t<string>('cta.modal.fullName')}
+                    <span className={styles.required}>*</span>
                   </label>
                   <input
                     id="demo-fullName"
@@ -392,12 +428,13 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
                     type="text"
                     autoComplete="name"
                     required
-                    placeholder="Ada Chen"
+                    placeholder={placeholders.fullName}
                   />
                 </div>
                 <div className={styles.field} data-demo-field>
                   <label className={styles.label} htmlFor="demo-email">
-                    Work email<span className={styles.required}>*</span>
+                    {t<string>('cta.modal.workEmail')}
+                    <span className={styles.required}>*</span>
                   </label>
                   <input
                     id="demo-email"
@@ -406,12 +443,13 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
                     type="email"
                     autoComplete="email"
                     required
-                    placeholder="you@organization.com"
+                    placeholder={placeholders.email}
                   />
                 </div>
                 <div className={styles.field} data-demo-field>
                   <label className={styles.label} htmlFor="demo-org">
-                    Organization<span className={styles.required}>*</span>
+                    {t<string>('cta.modal.organization')}
+                    <span className={styles.required}>*</span>
                   </label>
                   <input
                     id="demo-org"
@@ -420,12 +458,13 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
                     type="text"
                     autoComplete="organization"
                     required
-                    placeholder="Your org or facility"
+                    placeholder={placeholders.organization}
                   />
                 </div>
                 <div className={styles.field} data-demo-field>
                   <label className={styles.label} htmlFor="demo-role">
-                    Role / title<span className={styles.required}>*</span>
+                    {t<string>('cta.modal.role')}
+                    <span className={styles.required}>*</span>
                   </label>
                   <input
                     id="demo-role"
@@ -434,12 +473,12 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
                     type="text"
                     autoComplete="organization-title"
                     required
-                    placeholder="Director of Operations"
+                    placeholder={placeholders.role}
                   />
                 </div>
                 <div className={styles.field} data-demo-field>
                   <label className={styles.label} htmlFor="demo-phone">
-                    Phone <span className={styles.labelHint}>(optional)</span>
+                    {t<string>('cta.modal.phone')} <span className={styles.labelHint}>{t<string>('cta.modal.optional')}</span>
                   </label>
                   <input
                     id="demo-phone"
@@ -447,18 +486,18 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
                     className={styles.input}
                     type="tel"
                     autoComplete="tel"
-                    placeholder="+1 …"
+                    placeholder={placeholders.phone}
                   />
                 </div>
                 <div className={styles.field} data-demo-field>
                   <label className={styles.label} htmlFor="demo-notes">
-                    Goals / notes <span className={styles.labelHint}>(optional)</span>
+                    {t<string>('cta.modal.notes')} <span className={styles.labelHint}>{t<string>('cta.modal.optional')}</span>
                   </label>
                   <textarea
                     id="demo-notes"
                     name="notes"
                     className={styles.textarea}
-                    placeholder="Integrations, timeline, compliance context…"
+                    placeholder={placeholders.notes}
                     rows={3}
                   />
                 </div>
@@ -471,15 +510,16 @@ export function DemoRequestModal({ isOpen, triggerRef, onRequestClose }: Props) 
                     value="yes"
                   />
                   <label className={styles.checkboxLabel} htmlFor="demo-consent">
-                    You may contact me about this demo request.<span className={styles.required}>*</span>
+                    {t<string>('cta.modal.consent')}
+                    <span className={styles.required}>*</span>
                   </label>
                 </div>
                 <div className={styles.actions} data-demo-field>
                   <button type="submit" className={styles.submit}>
-                    Submit request
+                    {t<string>('cta.modal.submit')}
                   </button>
                   <button type="button" className={styles.cancel} onClick={requestClose}>
-                    Cancel
+                    {t<string>('cta.modal.cancel')}
                   </button>
                 </div>
               </form>
